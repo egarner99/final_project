@@ -6,13 +6,18 @@
 - Environment: Pitzer 
 
 
-# Set-up of dirs 
+# Set-up of dirs:
 
 ```bash
 mkdir final_project
 ```
 
-The scripts dir & README.md files were made using the new file/folder options in VS code. However, they can also be created using: 
+Navigate to the `final_project` dir: 
+```bash
+cd final_project
+```
+
+The scripts dir for the downloads scripts & README.md files were made using the create new ile/folder options in VS code. However, they can also be created using: 
 
 ```bash
 mkdir scripts
