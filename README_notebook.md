@@ -35,12 +35,11 @@ sleep 5
 curl [URL2]
 ```
 
-I tried it to see if it would work, but that just made it fail sooner, with the same error. Instead, I used a script suggested from GitHub Copilot; we were allowed to ask questions that we could use to help us for our project during Graded Assignment #5. The question I asked was: "How do I write a script to download and rename files from the SRA Explorer at the same time?" (from Graded Assignment #5). I copied the script from my initial promoting of the question, followed the process that the AI described (see README_protocol.md), and ran the script. 
+I tried it to see if it would work, but it still failed with the same error. Instead, I used a script suggested from GitHub Copilot; we were allowed to ask questions that we could use to help us for our project during Graded Assignment #5. The question I asked was: "How do I write a script to download and rename files from the SRA Explorer at the same time?" (from Graded Assignment #5). I copied the script from my initial promoting of the question, followed the process that the AI described (see README_protocol.md), and ran the script. 
 
-Using the script worked! All the files (18 in total for R1 and R2) were downloaded, renamed, and put into a downloads folder (and the final logging statement was in the slurm file). The slurm file was placed in there as well. A copy of the downloads folder was made (`downloads_copy`) and both were put into a folder called `GM137_data`. 
+Using the script worked! All the files (18 in total for R1 and R2) were downloaded, renamed, and put into a downloads folder (and the final logging statement was in the slurm file). The slurm file was also moved into the downloads dir as well. A copy of the downloads folder was made (`downloads_copy`) and both were put into a folder called `GM137_data`. For now, I also made both of the downloads dirs read only. 
 
-The `download_data.sh` script and the initial, along with `sra_files.txt` needed to download the files were put in a dir called `downloading_files`. 
-
+The `scripts` dir with the downloading scripts and `sra_files.txt` were put in a dir called `downloading_files`. 
 
 
 
