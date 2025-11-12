@@ -1,2 +1,12 @@
 ## Final Project - Proposal
 
+With this project I hope to practice the process of RNA sequencing to prepare data for it and hopefully also analyze expression levels. I want the focus of my project to be so to help me to analyze similar data in the future. I will working with .fastq files that were run on Illumina from a project titled "Differential transcriptome reprogramming induced by the soybean cyst nematode Type 0 and Type 1.2.5.7 during resistant and susceptible interactions". At the very least, I would like to obtain a count table of the different reads, but my main goal will be to again analyze expression levels using R. 
+
+<br>
+I will be following the workflow recommended to me by Dr. Poelstra and which was also described and practiced throughout the course, I will first download the data from the SRA Explorer (was already done with help from GitHub Copilot), trim the data using TrimGalore, map the reads using STAR, and upon recommendation from Dr. Poelstra, will using FeatureCounts to count the reads. For each of these sections, I will create a separate script for organizaiton and ato make sure that each step can be run correctly, and individually if needed. Finally, I will use R to analyze expression levels. 
+
+<br>
+In regards to what parts of the project I am still uncertain about, while I have somewhat of an understanding of how this RNA sequencing pipeline should work, I still have some questions about why each part is needed, or what they do, which will require some extra research on my part. There are also some scripts for programs that I haven't had experience writing yet, such as for STAR and FeatureCounts, that might take me a while to get correct. We also have just started working with R, so I may nervous I may not have the understanding of the program that I need in order to analyze expression levels. Additionally, I'm not sure how we can use the program to go about doing so, but again this just means I have some extra research to do. 
+
+<br>
+As mentioned, I picked this project because I will have to do RNA sequencing with my own project for my Master's thesis. I hope that by practicing the process with this final project, I will by able to expand my knowledge on how the process works, to be able to do it in the future. 
