@@ -41,5 +41,8 @@ Using the script worked! All the files (18 in total for R1 and R2) were download
 
 The `scripts` dir with the downloading scripts and `sra_files.txt` were put in a dir called `downloading_files`. 
 
+<br>
 
+## 11/25/25: 
 
+Today I tried to create a script as well as attempted to run it to put the GM137 files through the FastQC program. Recommended by Menuka, I am running it through FastQC before TrimGalore to get an idea of what the sequences look like (if there are multiple N's at the end, etc.). I used the examples in the class website to base my script on. The script is called `run_fastqc.sh` and is the dir `fastqc/run_fastq.sh`. 
