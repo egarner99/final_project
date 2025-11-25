@@ -34,3 +34,14 @@ sbatch scripts/download_data.sh sra_files.txt
 ```
 
 After the script runs, the downloaded files and slurm file were moved into a dir called `GM137_data`, and can be referred to for the rest of the steps. A copy of the files was also made if needed.
+
+# Running the GM137 files through FastQC:
+
+To run the GM137 files through FastQC, the script `run_fastqc.sh` can be used, which is found in the `fastqc` dir. It can be run using the following: 
+
+```bash
+sbatch fastqc/run_fastqc.sh
+```
+
+
+
