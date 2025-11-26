@@ -45,4 +45,18 @@ The `scripts` dir with the downloading scripts and `sra_files.txt` were put in a
 
 ## 11/25/25: 
 
-Today I tried to create a script as well as attempted to run it to put the GM137 files through the FastQC program. Recommended by Menuka, I am running it through FastQC before TrimGalore to get an idea of what the sequences look like (if there are multiple N's at the end, etc.). I used the examples in the class website to base my script on. The script is called `run_fastqc.sh` and is the dir `fastqc/run_fastq.sh`. 
+Today I tried to create a script as well as attempted to run it to put the GM137 files through the FastQC program. Recommended by Menuka, I am running it through FastQC before TrimGalore to get an idea of what the sequences look like (if there are multiple N's at the end, etc.). I used the examples in the class website/notes to base my script on. The script is called `run_fastqc.sh` and is the dir `fastqc/run_fastq.sh`. 
+
+The first run didn't work, and kept repeating the initial logging statment. After looking back at the notes, I realized that the looping code is what is put in the terminal, not the script, and that this portion is what is needed in the script instead: 
+
+```bash
+fastqc --outdir "$fastq" "$outdir"
+```
+
+I then realized that I had put this section in the script in the wrong order, based on the slurm files that I had gotten and again the class website:
+
+```bash
+fastqc --outdir "$outdir" "$fastq"
+```
+I re-ran the script again to see if it would work.
+
