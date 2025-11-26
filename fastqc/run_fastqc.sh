@@ -7,9 +7,16 @@
 
 set -euo pipefail
 
+fastq=$1
+outdir=$2
+
 # Initial logging
 echo "Starting script run_fastqc.sh"
 date
+
+# Making the output dir
+
+mkdir -p "$outdir"
 
 # Loading FastQC
 
@@ -17,9 +24,7 @@ module load fastqc/0.12.1
 
 # Looping over the data files
 
-for fastq in ../final_project/GM137_data/downloads/final_project/GM137_data/downloads/SRR*fastq.gz; do
-  bash fastqc/run_fastqc.sh "$fastq" fastqc/results
-done
+fastqc --outdir "$outdir" "$fastq"
 
 # Final logging
 echo 
