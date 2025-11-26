@@ -40,8 +40,8 @@ After the script runs, the downloaded files and slurm file were moved into a dir
 To run the GM137 files through FastQC, the script `run_fastqc.sh` can be used, which is found in the `fastqc` dir. It can be run using the following: 
 
 ```bash
-sbatch fastqc/run_fastqc.sh
+for fastq in ../final_project/GM137_data/downloads/SRR*fastq.gz; do
+  sbatch fastqc/run_fastqc.sh "$fastq" fastqc/results
+done
 ```
-
-
 
