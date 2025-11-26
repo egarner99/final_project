@@ -17,7 +17,7 @@ Navigate to the `final_project` dir:
 cd final_project
 ```
 
-The scripts dir for the downloads scripts & README.md files were made using the create new ile/folder options in VS code. However, they can also be created using: 
+The scripts dir for the downloads scripts & README.md files were made using the create new ile/folder options in VS code. However, they can also be created using the following if needed:
 
 ```bash
 mkdir scripts
@@ -37,11 +37,18 @@ After the script runs, the downloaded files and slurm file were moved into a dir
 
 # Running the GM137 files through FastQC:
 
-To run the GM137 files through FastQC, the script `run_fastqc.sh` can be used, which is found in the `fastqc` dir. It can be run using the following: 
+A new dir for this section was created called `fastqc/`. 
+
+To run the GM137 files through FastQC, the script `run_fastqc.sh` can be used, which is found in the `fastqc/` dir. It can be run using the following: 
 
 ```bash
 for fastq in ../final_project/GM137_data/downloads/SRR*fastq.gz; do
   sbatch fastqc/run_fastqc.sh "$fastq" fastqc/results
 done
 ```
+
+As the script runs, it will create a dir in the `fastqc/` dir called `results` in which all the files can be found, if the `fastqc/results/` dir isn't already present. 
+
+
+
 
