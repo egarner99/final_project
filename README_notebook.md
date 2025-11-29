@@ -64,3 +64,17 @@ Either tomorrow or Friday, I will check each of the .html files, and use the inf
 
 For now, I kept the slurms for the runs that did not work from today, for reference later. It is called `old_slurms`, and is also in the `fastqc/` dir. 
 
+<br>
+
+## 11/28/25: 
+
+Checking the .html files, they all seem to have good per base sequence quality, although some of them seem to have an error in the per tile sequence quality, as well as errors in per base sequence content and sequence duplication levels. I will have to do some research to see if those are an issue, and if that means I need to add something to my trimgalore script. 
+
+I also worked on the trimgalore script for the GM137 files, using the class website and the fastq script I made to help me create it and know what to include. Initially, I had trouble getting the correct code to download the container, but with help from GitHub Copilot I figured out that I needed to use the command `trim_galore` instead of `trimgalore` at the end. Checking the .html files, I also saw that some of them had polyG's at the end, so I added the 2color option as well. After a bit of trial and error, I ran a trial run on a sequence that had the polyG's, with my script (`trimgalore/run_trimgalore`), using the command: 
+
+```bash
+sbatch trimgalore/run_trimgalore.sh GM137_data/downloads/SRR24727832_GSM7426419_Gm137_H._glycines_Race_2_infected_RNA_bio_rep_1_Glycine_max_RNA-Seq_2.fastq.gz trimgalore/results
+```
+
+
+
