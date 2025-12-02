@@ -14,7 +14,7 @@ TRIMGALORE=oras://community.wave.seqera.io/library/trim-galore:0.6.10--bc38c9238
 
 # Initial logging
 
-echo "Starting script run_fastqc.sh"
+echo "Starting script run_trimgalore.sh"
 date
 
 # Making the output dir
@@ -27,6 +27,6 @@ apptainer exec "$TRIMGALORE" trim_galore --2colour 20 --output_dir "$outdir" "$f
 
 # Final logging
 echo 
-echo "Finished script run_fastqc.sh"
-fastqc --version
+echo "Finished script run_trimgalore.sh"
+apptainer exec "$TRIMGALORE" trim_galore --version
 date
