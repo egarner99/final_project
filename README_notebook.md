@@ -86,5 +86,17 @@ for fastq in ../final_project/GM137_data/downloads/SRR*.fastq.gz; do
 done
 ```
 
+## 12/2/25: 
 
+I edited my loop to run the files as paired ends, with the following code: 
 
+```bash
+for Seq_1 in ../final_project/GM137_data/downloads/SRR*-Seq_1.fastq.gz; do
+    Seq_2=${Seq_1/-Seq_1/-Seq_2}
+    sbatch trimgalore/run_trimgalore.sh "$Seq_1" "$Seq_2" trimgalore/results
+done
+```
+
+I initially had () around the second line instead of {} and ran it, those files will be removed once it is done since the loop was incorrect. 
+
+I also changed my script to also run paired ends by adding `--paired` to the apptainer exec code, as well as changing `fastq=$1` to `Seq_1=$1` and `Seq_2=$2`. The `"$outdir"` was moved to `$3`. I also saw on the class website that a `--fastq` option can be added to automatically run FastQC again once the trimming is done, so I added that as well. I reran the files with these changes, and will check back later to see if it worked. 
