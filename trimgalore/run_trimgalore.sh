@@ -7,8 +7,9 @@
 
 set -euo pipefail
 
-fastq=$1
-outdir=$2
+Seq_1=$1
+Seq_2=$2
+outdir=$3
 
 TRIMGALORE=oras://community.wave.seqera.io/library/trim-galore:0.6.10--bc38c9238980c80e
 
@@ -23,7 +24,7 @@ mkdir -p "$outdir"
 
 # Loading & Running TrimGalore 
 
-apptainer exec "$TRIMGALORE" trim_galore --2colour 20 --output_dir "$outdir" "$fastq"
+apptainer exec "$TRIMGALORE" trim_galore --paired --fastqc --2colour 20 --output_dir "$outdir" "$Seq_1" "$Seq_2"
 
 # Final logging
 echo 
