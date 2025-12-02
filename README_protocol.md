@@ -35,6 +35,7 @@ sbatch scripts/download_data.sh sra_files.txt
 
 After the script runs, the downloaded files and slurm file were moved into a dir called `GM137_data`, and can be referred to for the rest of the steps. A copy of the files was also made if needed.
 
+
 # Running the GM137 files through FastQC:
 
 A new dir for this section was created called `fastqc/`. 
@@ -48,6 +49,25 @@ done
 ```
 
 As the script runs, it will create a dir in the `fastqc/` dir called `results` in which all the files can be found, if the `fastqc/results/` dir isn't already present. 
+
+
+# Running the GM137 files through TrimGalore: 
+
+A new dir for this section was created called `trimgalore/`, and can be created using the following in the terminal: 
+
+```bash
+mkdir trimgalore/
+```
+
+The GM137 files can be run through TrimGalore as paired end files using the script `run_trimgalore.sh`, which is found in the `trimgalore/` dir. It will also run FastQC once it is done trimming the files. It can be run using the following loop: 
+
+```bash
+for Seq_1 in ../final_project/GM137_data/downloads/SRR*-Seq_1.fastq.gz; do
+    Seq_2=${Seq_1/-Seq_1/-Seq_2}
+    sbatch trimgalore/run_trimgalore.sh "$Seq_1" "$Seq_2" trimgalore/results
+done
+```
+As the script runs, it will again create a dir in `trimgalore/` called `results` in which the files can be found, if the `trimgalore/results` dir isn't already created. 
 
 
 
