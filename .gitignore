@@ -1,2 +1,6 @@
 GM137_data/
-fastqc/
+fastqc/old_slurms
+fastqc/results
+fastqc/slurms
+trimgalore/results
+trimgalore/slurms
