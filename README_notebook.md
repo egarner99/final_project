@@ -76,5 +76,15 @@ I also worked on the trimgalore script for the GM137 files, using the class webs
 sbatch trimgalore/run_trimgalore.sh GM137_data/downloads/SRR24727832_GSM7426419_Gm137_H._glycines_Race_2_infected_RNA_bio_rep_1_Glycine_max_RNA-Seq_2.fastq.gz trimgalore/results
 ```
 
+## 11/29/25: 
+
+After a bit more editing, my trial as seen above was able to work. With that in mind, I ran a loop for all of the files using the following code: 
+
+```bash
+for fastq in ../final_project/GM137_data/downloads/SRR*.fastq.gz; do
+    sbatch trimgalore/run_trimgalore.sh "$fastq" trimgalore/results
+done
+```
+
 
 
