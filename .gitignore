@@ -3,4 +3,5 @@ fastqc/old_slurms
 fastqc/results
 fastqc/slurms
 trimgalore/slurms
+trimgalore/results
 
