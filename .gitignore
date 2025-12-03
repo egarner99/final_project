@@ -4,4 +4,5 @@ fastqc/results
 fastqc/slurms
 trimgalore/slurms
 trimgalore/results
+star/GCFF_000001405.39_GRCh38.p13/
 
