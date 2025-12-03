@@ -99,4 +99,33 @@ done
 
 I initially had () around the second line instead of {} and ran it, those files will be removed once it is done since the loop was incorrect. 
 
-I also changed my script to also run paired ends by adding `--paired` to the apptainer exec code, as well as changing `fastq=$1` to `Seq_1=$1` and `Seq_2=$2`. The `"$outdir"` was moved to `$3`. I also saw on the class website that a `--fastq` option can be added to automatically run FastQC again once the trimming is done, so I added that as well. I reran the files with these changes, and will check back later to see if it worked. 
+I also changed my script to also run paired ends by adding `--paired` to the apptainer exec code, as well as changing `fastq=$1` to `Seq_1=$1` and `Seq_2=$2`. The `"$outdir"` was moved to `$3`. I also saw on the class website that a `--fastq` option can be added to automatically run FastQC again once the trimming is done, so I added that as well. I reran the files with these changes, and will check back later to see if it worked.
+
+I also took a look into the reference genome that the authors of the data files used for their analysis to create their index. They used the Williams 82 soybean sequence Wm82.a2.v1, which can be found on Soybase, as well as on NCBI RefSeq as GCF_000004515.5. On NCBI, it has a more current version called GCF_000004515.6, so that is the one that I downloaded, along with its annotation GTF file. 
+
+## 12/3/25: 
+
+Today, I worked on the `run_star_index` script, using my previous scripts and the one on the Week 9 exercises page to help me create it. The page mentioned looking into the `--sjdbOverhang` and `--genomeSAindexNbases` option, so I added those as well. With the help of GitHub Copilot, it explained that `--sjdbOverhang` is how many bases on each side of a sequence to save during splice site, to help it with mapping. It mentioned that this can be determined by calculating `readlength - 1`, with the first read length and the most common read length of the file being determined using the following codes provided by Copilot: 
+
+```bash
+head -n 2 your_file.fastq | tail -n 1 | wc -c
+```
+
+```bash
+awk 'NR%4==2 {print length}' your_file.fastq | sort | uniq -c | sort -rn | head -n 1
+```
+
+I got a value of 81 for the first one, and 80 for 3059158 reads, so I went with 80; although I originally thought that would mean the `--sjdbOverhang` option would be set to 99 due to a misunderstanding, GitHub copilot clarified that the option would be set as `--sjdbOverhang 79`. 
+
+In regards to `--genomeSAindexNbases`, it recommended calculating by using the equation `(log2(genomeLength)/2 - 1)`, along with some other information. Based on this, I estimated that a value of 13 would work for the genome, since 14 is for larger genomes and 12 is for smaller genomes, and I confirmed it with Copilot. So, the final code looked like this: 
+
+```bash
+apptainer exec "$STAR" STAR \
+    --runMode genomeGenerate \
+     --genomeFastaFiles "$fasta" \
+     --genomeDir "$outdir" \
+     --sjdbGTFfile "$gtf" \
+     --runthreadN 16 \
+     --sjdbOverhang 79 \
+     --genomeSAindexNbases 13
+```
