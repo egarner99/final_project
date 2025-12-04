@@ -29,12 +29,12 @@ apptainer exec "$STAR" STAR \
      --genomeFastaFiles "$fasta" \
      --genomeDir "$outdir" \
      --sjdbGTFfile "$gtf" \
-     --runthreadN 16 \
+     --runThreadN 16 \
      --sjdbOverhang 79 \
      --genomeSAindexNbases 13
 
 # Final logging
 echo 
-echo "Finished script run_trimgalore.sh"
-apptainer exec "$TRIMGALORE" trim_galore --version
+echo "Finished script run_star_index.sh"
+apptainer exec "STAR" STAR --version
 date
