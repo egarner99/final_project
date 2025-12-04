@@ -23,12 +23,14 @@ Had a couple of errors after trying the script with the header #!/bin/bash, atte
 
 ## 11/5/25:
 
-As mentioned, when trying the script a few times the download kept failing after a certain amount of files, with the following error appearing in the slurm files: 
+As mentioned, when trying the script a few times the download kept failing after a certain amount of files, with the following error appearing in the slurm files:
+
 ```bash
 (56) Recv failure: Connection reset by peer
 ```
 
 I asked GitHub Copilot what the error could mean, and one of the suggestions was adding in a sleep command between each file like this: 
+
 ```bash
 curl [URL1]
 sleep 5
@@ -129,3 +131,11 @@ apptainer exec "$STAR" STAR \
      --sjdbOverhang 79 \
      --genomeSAindexNbases 13
 ```
+Ran the GCF and its corresponding gtf file by submitting a batch job using the following code: 
+
+```bash
+sbatch star/run_star_index.sh final_project/star/GCF_000004515.6_Williams82/ncbi_dataset/data/GCF_000004515.6/GCF_000004515.6_Glycine_max_v4.0_genomic.fna final_project/star/GCF_000004515.6_Williams82/ncbi_dataset/data/GCF_000004515.6/genomic.gtf star/results
+```
+
+
+
