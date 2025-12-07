@@ -1,8 +1,2 @@
-GM137_data/
-fastqc/old_slurms
-fastqc/results
-fastqc/slurms
-trimgalore/slurms
-trimgalore/results
-star/GCF_000004515.6_Williams82
-star/results
+results/
+data/
