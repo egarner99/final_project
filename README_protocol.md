@@ -48,7 +48,7 @@ The slurm file can be moved and stored using the following:
 
 ```bash
 mkdir data/GM137_data/slurms/
-mv slurm* data/GM137_data/slurms/
+mv slurm*.out data/GM137_data/slurms/
 ```
 
 # Running the GM137 files through FastQC:
@@ -56,12 +56,20 @@ mv slurm* data/GM137_data/slurms/
 To run the GM137 files through FastQC, the script `run_fastqc.sh` can be used, which is found in the `scripts/` dir. It can be run using the following: 
 
 ```bash
-for fastq in ../final_project/data/GM137_data/downloads/SRR*fastq.gz; do
+for fastq in ../final_project/data/GM137_data/SRR*fastq.gz; do
   sbatch scripts/run_fastqc.sh "$fastq" results/fastqc
 done
 ```
 
 As the script runs, it will create a dir in the `results/` dir called `fastqc/` in which all the files can be found.
+
+
+The slurm files can be moved and stored using the following:
+
+```bash
+mkdir results/fastqc/slurms/
+mv slurm*.out results/fastqc/slurms/
+```
 
 
 # Running the GM137 files through TrimGalore: 
