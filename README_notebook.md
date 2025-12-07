@@ -150,3 +150,5 @@ sbatch scripts/run_data_download.sh
 ```
 
 I updated the protocol to what it should look like with the new organization. I also edited the protocol to download the reference file, and will use it for this second "run". I also decided to edit the `run_data_download.sh` script to more simply move the files into a dir called `GM137_data/` instead of `downloads/`, using advice from GitHub Copilot and the class website. I tried a few different things, adding `-P` at the beginning with the path to the dir (`data/GM137_data`), adding the dir as a path to the new file name with `-O` (which just made the file upload twice, once to the terminal and another to the dir I wanted), but what finally worked properly was moving the section with `-O` and the path to the dir + new file name to the front, and the `-L <url>` to the end. 
+
+The new script seems to work! Files are in the correct dir and it was copied, and no fails on the slurm file. Moved onto running the `run_fastqc.sh` script with the new files, again with code following the new file/script organization. 
