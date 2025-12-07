@@ -137,5 +137,16 @@ Ran the GCF and its corresponding gtf file by submitting a batch job using the f
 sbatch star/run_star_index.sh final_project/star/GCF_000004515.6_Williams82/ncbi_dataset/data/GCF_000004515.6/GCF_000004515.6_Glycine_max_v4.0_genomic.fna final_project/star/GCF_000004515.6_Williams82/ncbi_dataset/data/GCF_000004515.6/genomic.gtf star/results
 ```
 
+# 12/6/25: 
 
+Based on the comments that I got for my final progress report, I reworked the organization of my final_project dir. All the scripts were moved into a dir called `scripts/`, the result files from FastQC, TrimGalore, and Star were moved into a dir called `results/`, and a `data/` dir was made for the original downloaded GM137 files and the downloaded reference genome files. 
 
+I also got a comment on how to use the wget command to download the data instead of using the complicated one from GitHub Copilot, changing the `-o` that the script on the SRA Explorer had to `-O`. I also added a section to move and copy the `downloads/` dir manually instead of doing it by hand. Once the data is done downloading, all scripts will be re-run with the changed code for the new organization to make sure everything works, as was recommended. 
+
+New code to run the `run_data_download.sh` script: 
+
+```bash
+sbatch scripts/run_data_download.sh
+```
+
+I updated the protocol to what it should look like with the new organization. I also edited the protocol to download the reference file, and will use it for this second "run". I also decided to edit the `run_data_download.sh` script to more simply move the files into a dir called `GM137_data/` instead of `downloads/`, using advice from GitHub Copilot and the class website. I tried a few different things, adding `-P` at the beginning with the path to the dir (`data/GM137_data`), adding the dir as a path to the new file name with `-O` (which just made the file upload twice, once to the terminal and another to the dir I wanted), but what finally worked properly was moving the section with `-O` and the path to the dir + new file name to the front, and the `-L <url>` to the end. 
