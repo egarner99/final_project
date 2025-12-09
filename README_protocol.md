@@ -71,37 +71,57 @@ mkdir results/fastqc/slurms/
 mv slurm*.out results/fastqc/slurms/
 ```
 
-
 # Running the GM137 files through TrimGalore: 
 
 The GM137 files can be run through TrimGalore as paired end files using the script `run_trimgalore.sh`, which is found in the `scripts/` dir. It will also run FastQC once it is done trimming the files. It can be run using the following loop: 
 
 ```bash
-for Seq_1 in ../final_project/data/GM137_data/downloads/SRR*-Seq_1.fastq.gz; do
+for Seq_1 in ../final_project/data/GM137_data/SRR*-Seq_1.fastq.gz; do
     Seq_2=${Seq_1/-Seq_1/-Seq_2}
     sbatch scripts/run_trimgalore.sh "$Seq_1" "$Seq_2" results/trimgalore
 done
 ```
 As the script runs, it will again create a dir in `results/` called `trimgalore/` in which the files can be found.
 
+The slurm files can be moved and stored using the following:
+
+```bash
+mkdir results/trimgalore/slurms/
+mv slurm*.out results/trimgalore/slurms/
+```
 
 # Creating the reference genome index with Star: 
 
 
-The reference genome can be found on NCBI for Williams 82 soybean, GCF_000004515.6 (see README_notebook.md for further details). A new dir was created to move the new files into using: 
+The reference genome can be found and downloaded on NCBI for Williams 82 soybean, GCF_000004515.6 (see README_notebook.md for further details). A new dir can be created to move the new files into using: 
 
 ```bash
 mkdir data/GCF_Williams82_data/
 ```
 
-The app FileZilla was used to move the .fasta and .gtf files into VS Code to the `data/GCF_Williams82_data/` dir.
+The app FileZilla can be used to move the .fasta and .gtf files into VS Code to the `data/GCF_Williams82_data/` dir. The files are downloaded to your computer as a dir called `ncbi_dataset/`. In FileZilla, follow the structure of the `ncbi_dataset/` dir to the `GCF_000004515.6/` dir, and transfer over the .fna and .gtf file. The README file can also be transferred over as well if needed. The files can also be made executable by the following: 
+
+```bash
+chmod -R a+x data/GCF_Williams82_data
+```
 
 The script for creating the index is `run_star_index.sh` in the `script/` dir. It uses the .gtf file to map out the genes found on the GCF_000004515.6 genome, and will create a `results/star` dir if not already created. It can be run using the following: 
 
 ```bash
-sbatch star/run_star_index.sh star/GCF_Williams82_data/ncbi_dataset/data/GCF_000004515.6/GCF_000004515.6_Glycine_max_v4.0_genomic.fna star/GCF_Williams82_data/ncbi_dataset/data/GCF_000004515.6/genomic.gtf results/star
+sbatch scripts/run_star_index.sh data/GCF_Williams82_data/GCF_000004515.6_Glycine_max_v4.0_genomic.fna data/GCF_Williams82_data/genomic.gtf results/star/index/
 ```
 
+The slurm files can be moved and stored using the following:
 
+```bash
+mkdir results/star/slurms/
+mv slurm*.out results/star/slurms/
+```
 
+# Aligning the GM137 reads to the reference genome index with Star: 
 
+```bash
+for Seq_1 in ../final_project/results/trimgalore/SRR*-Seq_1_trimmed.fq.gz; do
+    Seq_2=${Seq_1/-Seq_1/-Seq_2}
+    sbatch scripts/run_star_align.sh "$Seq_1" "$Seq_2" results/star/index/ data/GCF_Williams82_data/genomic.gtf results/star/align/
+```
