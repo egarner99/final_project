@@ -3,7 +3,7 @@
 #SBATCH --mail-type=END,FAIL
 #SBATCH --output=slurm-downloads-%j.out
 #SBATCH --time=12:00:00
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=16
 
 set -euo pipefail
 
@@ -36,5 +36,5 @@ apptainer exec "$STAR" STAR \
 # Final logging
 echo 
 echo "Finished script run_star_index.sh"
-apptainer exec "STAR" STAR --version
+apptainer exec "$STAR" STAR --version
 date
