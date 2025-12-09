@@ -152,3 +152,32 @@ sbatch scripts/run_data_download.sh
 I updated the protocol to what it should look like with the new organization. I also edited the protocol to download the reference file, and will use it for this second "run". I also decided to edit the `run_data_download.sh` script to more simply move the files into a dir called `GM137_data/` instead of `downloads/`, using advice from GitHub Copilot and the class website. I tried a few different things, adding `-P` at the beginning with the path to the dir (`data/GM137_data`), adding the dir as a path to the new file name with `-O` (which just made the file upload twice, once to the terminal and another to the dir I wanted), but what finally worked properly was moving the section with `-O` and the path to the dir + new file name to the front, and the `-L <url>` to the end. 
 
 The new script seems to work! Files are in the correct dir and it was copied, and no fails on the slurm file. Moved onto running the `run_fastqc.sh` script with the new files, again with code following the new file/script organization. 
+
+# 12/7/25: 
+
+Checked three of the new .html files to the old ones from before; they all matched indicating that everything worked properly. The slurms were also moved with the fastqc results. I re-ran the trimgalore script as well based on the new organization. While it was running, I worked on the `run_star_align.sh` script. I followed the example in the class website (Week 9 exercises). It recommended adding a few other options: `--alignIntronMin`, `--alignIntronMax`, and `--outFilterMultimapNmax`. Using GitHub Copilot, it recommended the option `--alignIntronMin` of 20 and an `--alignIntronMax` of 500,000 as general options for plants, so those are the ones I used. It also described what both are used are, and they basically set a guidline for the smallest and largest base pair size that Star will consider a splice intron. Interestingly, when I searched up `--outFilterMultimapNmax` on the `--help` section for Star, nothing came up so I left it alone. I also started on a basic outline for the loop to run the script:
+
+```bash
+for Seq_1 in ../final_project/results/trimgalore/SRR*-Seq_1_trimmed.fq.gz; do
+    Seq_2=${Seq_1/-Seq_1/-Seq_2}
+    sbatch scripts/run_star_align.sh "$Seq_1" "$Seq_2" results/star_index/ data/GCF/.gtf  results/star_align
+```
+
+After the trimgalore script ran, I re-ran the `run_star_index.sh` script using the GCF_Williams82_data files based again on the new organization. The new code to run trimgalore and star_index are as follows: 
+
+TrimGalore: 
+```bash
+for Seq_1 in ../final_project/data/GM137_data/SRR*-Seq_1.fastq.gz; do
+    Seq_2=${Seq_1/-Seq_1/-Seq_2}
+    sbatch scripts/run_trimgalore.sh "$Seq_1" "$Seq_2" results/trimgalore
+done
+```
+
+Star (for index): 
+```bash
+sbatch scripts/run_star_index.sh data/GCF_Williams82_data/ncbi_dataset/GCF_000004515.6/GCF_000004515.6_Glycine_max_v4.0_genomic.fna data/GCF_Williams82_data/ncbi_dataset/GCF_000004515.6/genomic.gtf results/star/index/
+```
+
+# 12/9/25: 
+
+Some slight edits were done on the `run_star_index.sh` script yesterday, including realizing the `--runThreads` option did not match the number of cores requested. Might have to run again, especially because I actually don't think the reference genome file is unzipped, because it was an .fna. Also worked on the loop for Star align (I believe not yesterday but on the 7th). 
