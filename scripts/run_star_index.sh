@@ -30,7 +30,7 @@ apptainer exec "$STAR" STAR \
      --genomeDir "$outdir" \
      --sjdbGTFfile "$gtf" \
      --runThreadN 16 \
-     --sjdbOverhang 79 \
+     --sjdbOverhang 149 \
      --genomeSAindexNbases 13
 
 # Final logging
