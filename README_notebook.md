@@ -181,3 +181,33 @@ sbatch scripts/run_star_index.sh data/GCF_Williams82_data/ncbi_dataset/GCF_00000
 # 12/9/25: 
 
 Some slight edits were done on the `run_star_index.sh` script yesterday, including realizing the `--runThreads` option did not match the number of cores requested. Might have to run again, especially because I actually don't think the reference genome file is unzipped, because it was an .fna. Also worked on the loop for Star align (I believe not yesterday but on the 7th). 
+
+Re-read advice from GitHub Copilot again, since I have mixed read lengths it actually recommended using the largest read length. Using the code they gave me before, but remvoing the head -n 1, the longest length from the list was 158: 
+
+```bash
+awk 'NR%4==2 {print length}' your_file.fastq | sort | uniq -c | sort -rn 
+```
+
+However, after my presentation and the questions that I got, it became clear that I had a misunderstanding of the --sjdbOverhang option. I was calculating the sequence lengths from the reference genome, but I actually needed to do so for my GM137 trimmed files. With help from GitHub copilot, I tried to do a bit of trial and error to see if I could get the read length, such as trying the previous command with `awk`, but it wasn't working. I then tried the `seqkit` container based on its recommendation; it did seem to work to find the max length of reads for one file: 
+
+```bash
+apptainer exec oras://community.wave.seqera.io/library/seqkit:2.12.0--ec0d76090cceee7c seqkit stats -a results/trimgalore/SRR24727827_GSM7426424_Gm137_noninfected_RNA_bio_rep_3_Glycine_max_RNA-Seq_2_val_2.fq.gz
+```
+
+But, I would have to write a completely new script to run all the files (or do this command for each one individually), and I was unsure how to only get the max length statistic and not the others. Finally, I thought a simplier option would actually just be to check the .html files, and it was! It says the reads have a range from 20-150 bp, so I would use 150 to calculate the option for sjdbOverhang: `--sjdbOverhang 149` (the file I ran in seqkit also had similar results). I fixed that in the script, and will be using it to re-run the index (after I re-run trimgalore, it seems one of the files was accidentally deleted). 
+
+`run_star_index.sh` was errors were fixed and it was re-run with the reference genome. Once that was completed, I worked on running the `run_star_align.sh` script. As the script was done with help from the class website (and Copilot) there were some things I had to change in the code match my files, such as in regards to extracting the sample ID, and with my loop: 
+
+Star (for align): 
+
+```bash
+for Seq_1 in ../final_project/results/trimgalore/SRR*-Seq_1_val_1.fq.gz; do
+    Seq_2=${Seq_1/-Seq_1_val_1/-Seq_2_val_2}
+    sbatch scripts/run_star_align.sh "$Seq_1" "$Seq_2" results/star/index/ data/GCF_Williams82_data/genomic.gtf results/star/align/
+done
+```
+
+It seemed to work well, but I will have to confirm with Jelmer and Menuka tomorrow. It gave output files that have information about the mapped reads. Once I confirm it worked correctly, I will also get started on FeatureCounts, with the goal of having a script by tomorrow. 
+
+
+
