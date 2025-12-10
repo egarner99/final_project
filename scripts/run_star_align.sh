@@ -17,7 +17,7 @@ STAR=oras://community.wave.seqera.io/library/star:2.7.11b--84fcc19fdfab53a4
 
 # Basename for naming the files in the outdir
 
-sample_id=$(basename "$R1" _R1.fastq.gz)
+sample_id=$(basename "$Seq_1" -Seq_1_val_1.fq.gz)
 
 # Initial logging
 
@@ -31,12 +31,12 @@ mkdir -p "$outdir"
 # Loading & Running STAR for the index
 
 apptainer exec "$STAR" STAR \
-    --readFilesIn "$R1" "$R2" \
+    --readFilesIn "$Seq_1" "$Seq_2" \
     --genomeDir "$index_dir" \
     --runThreadN 8 \
     --sjdbGTFfile "$gtf" \
     --readFilesCommand zcat \
-    --outFileNamePrefix "$outdir"/"sample_id"_ \
+    --outFileNamePrefix "$outdir"/"$sample_id"_ \
     --outSAMtype BAM SortedByCoordinate \
     --alignIntronMin 20 \
     --alignIntronMax 500000 \
