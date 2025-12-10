@@ -120,8 +120,20 @@ mv slurm*.out results/star/slurms/
 
 # Aligning the GM137 reads to the reference genome index with Star: 
 
+The script for aligning the GM137 sequences to the index is in `run_star_align.sh` in the `scripts/` dir. It takes the paired, trimmed sequences and maps them to the index created. It can be run with the following: 
+
 ```bash
-for Seq_1 in ../final_project/results/trimgalore/SRR*-Seq_1_trimmed.fq.gz; do
-    Seq_2=${Seq_1/-Seq_1/-Seq_2}
+for Seq_1 in ../final_project/results/trimgalore/SRR*-Seq_1_val_1.fq.gz; do
+    Seq_2=${Seq_1/-Seq_1_val_1/-Seq_2_val_2}
     sbatch scripts/run_star_align.sh "$Seq_1" "$Seq_2" results/star/index/ data/GCF_Williams82_data/genomic.gtf results/star/align/
+done
 ```
+
+The slurm files can be moved and stored using the following: 
+
+```bash
+mkdir results/star/slurms/
+mv slurm*.out results/star/slurms/
+```
+
+# Getting read counts with featureCounts: 
