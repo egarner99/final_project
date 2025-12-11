@@ -209,5 +209,57 @@ done
 
 It seemed to work well, but I will have to confirm with Jelmer and Menuka tomorrow. It gave output files that have information about the mapped reads. Once I confirm it worked correctly, I will also get started on FeatureCounts, with the goal of having a script by tomorrow. 
 
+### Note: 
+For my final project presentation, I looked at a few references that helped me to further understand some of the options for Star index & align. This is the reference list: 
+
+- Doblin, A. 2019. STAR manual 2.7.0a. https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf. Cornell University editor(s). Cornell University, Ithaca, NY. 
+
+- Regan, K., Saghafi, A., Li, Z. 2021. Splice Junction Identification using Long Short-Term Memory Neural Networks. Curr Genomics. 22:384-390. 
+
+- Anonymous. Mapping using Star. https://biocorecrg.github.io/RNAseq_course_2019/alnpractical.html. Biocore editor(s). Barcelona, Spain.
+
+- Anonymous. 2013. What’s the difference between a bam and sorted bam. https://www.seqanswers.com/forum/bioinformatics/bioinformatics-aa/29595-what-s-the-difference-between-a-bam-and-a-sorted-bam. 
+
+- Sultana, M.S., Niyikiza, D., Hawk, T.E., Coffey, N., Lopes-Caitar, V., Pfotenhauer, A.C., El-Messidi, H., Wyman, C., Pantalone, V., Hewezi, T. 2024. Differential Transcriptome Reprogramming Induced by the Soybean Cyst Nematode Type 0 and Type 1.2.5.7 During Resistant and Susceptible Interactions. Mol Plant Microbe Interact. 37:828-840.
+
+- Anonymous. 2025. Understanding Soybean Cyst Nematode Genetic Resistance. https://www.cropscience.bayer.us/articles/bayer/understanding-scn-genetic-resistance. Bayer Crop Science editor(s). Bayer, Whippany, NJ. 
+
+
+# 12/10/25: 
+
+Confirmed the output was good with Jelmer, he also mentioned that featureCounts is found in the `subread` package: oras://community.wave.seqera.io/library/subread:2.1.1--bae420bffb4edf16. The container can be opened with:
+
+```bash
+apptainer exec oras://community.wave.seqera.io/library/subread:2.1.1--bae420bffb4edf16 featureCounts
+```
+
+I created a script for running FeatureCounts, using both GitHub Copilot, the featureCounts program help section, and two websites for help (Harrington, R. FeatureCounts. https://rnnh.github.io/bioinfo-notebook/docs/featureCounts.html.; Anonymous. 2021. featureCounts: a ultrafast and accurate read summarization program. https://subread.sourceforge.net/featureCounts.html.). The script has a couple of options in the main section: 
+
+```bash
+apptainer exec "$FeatureCounts" featureCounts \
+    -p \
+    -B \
+    -C \
+    -T 8 \
+    -a "$gtf" \
+    -o "$outdir"/"$sample_id".txt \
+    "$BAM_file"
+```
+
+`-a` is for inputting the gtf file, `-o` is to name the output files, `-T` is for threads (so its 8 to make the cpus) `-p` is for paired end data, and counts both of the reads together as pairs. `-B` and `-C` help with accuracy, and making sure only actual paired reads are counted on the same chromosome are counted. I also used the sample_id trick from the star align script as well for naming the output files. 
+
+I created a loop to run featureCounts, and used it in the terminal:
+
+```bash
+for BAM_file in results/star/align/SRR*_Aligned.sortedByCoord.out.bam; do
+    sbatch scripts/run_featurecounts.sh "$BAM_file" data/GCF_Williams82_data/genomic.gtf results/featurecounts/
+done
+```
+
+After a quick tweak to make sure the version printed correctly, it seems to work pretty well! I was a bit concerned about the level of Unassigned_Multimapping on the summary text; I asked GitHub Copilot about it, among what it mentioned was that it is possibly due to duplicated sequences, the reference .gtf file is incomplete, etc. Essentially though, the recommendation was as long as the percentage of reads unassigned compared to the total amount of reads was low, it should be fine (for the first output it was around 3% and same for Unassigned_No-Features amounts, and Unassigned_Ambiguity was around 0.36%). I will again check the output with Jelmer tomorrow, and move onto MultiQC and R Studio if it looks good! 
+
+
+
+
 
 
