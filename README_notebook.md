@@ -281,7 +281,7 @@ I changed the `results/star/align/` and `results/featurecounts/` to variables so
 sbatch scripts/run_multiqc.sh results/star/align/ results/featurecounts/ results/multiqc/
 ```
 
-Running the script worked, but the geo template was a bit hard on the eyes when I downloaded the .html file. I tried again with a different template (original) and it was much easier to see. It's a pretty cool summary, with a section for both featureCounts and Star. It shows information such as the percent assigned, aligned, and uniq aligned as well as a bar graph of the amount of reads assigned and unassigned for featureCounts. For STAR, it also had information on percent aligned, uniquely aligned, annonated splices, and more, as well as a bar graph of uniquely mapped, mapped to multiple or too many loci, and unmapped. 
+Running the script worked, but the geo template was a bit hard on the eyes when I downloaded the .html file. I tried again with a different template (original) and it was much easier to see. It's a pretty cool summary, with a section for both featureCounts and Star. It shows information such as the percent assigned, aligned, and uniq aligned as well as a bar graph of the amount of reads assigned and unassigned for featureCounts. For STAR, it also had information on percent aligned, uniquely aligned, annonated splices, and more, as well as a bar graph of uniquely mapped, mapped to multiple or too many loci, and unmapped.
 
 
 
