@@ -283,6 +283,5 @@ sbatch scripts/run_multiqc.sh results/star/align/ results/featurecounts/ results
 
 Running the script worked, but the geo template was a bit hard on the eyes when I downloaded the .html file. I tried again with a different template (original) and it was much easier to see. It's a pretty cool summary, with a section for both featureCounts and Star. It shows information such as the percent assigned, aligned, and uniq aligned as well as a bar graph of the amount of reads assigned and unassigned for featureCounts. For STAR, it also had information on percent aligned, uniquely aligned, annonated splices, and more, as well as a bar graph of uniquely mapped, mapped to multiple or too many loci, and unmapped.
 
-
-
+Started taking a look at the protocol for DESeq2 and realized that I need a count table of all of the samples together, not one for each BAM file. With help from GitHub Copilot, I fixed my script and the sbatch command to run again. For the sbatch command, instead of using a variable for the BAM files I put them into the script, similar to how Copilot showed, so that it would run properly (kept trying to make a dir out of one of the files). Once it was done, I re-ran multqic, and it gave pretty much the same information on the .html file (but now all of the count data is in one .txt file).
 
