@@ -152,4 +152,19 @@ mkdir results/featurecounts/slurms/
 mv slurm*.out results/featurecounts/slurms/
 ```
 
-# Running MultiQC: 
+# Getting STAR and featureCounts output summary with MultiQC:
+
+The script for running MultiQC is in the `scripts/` dir called `run_multiqc.sh`. It will create a summary of the outputs and information obtained from aligning the sequences with STAR and running featureCounts. It can be run with the following: 
+
+```bash
+sbatch scripts/run_multiqc.sh results/star/align/ results/featurecounts/ results/multiqc/
+```
+
+The slurm files can be moved and stored using the following:
+
+```bash
+mkdir results/multiqc/slurms/
+mv slurm*.out results/multiqc/slurms/
+```
+
+
