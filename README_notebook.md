@@ -258,7 +258,30 @@ done
 
 After a quick tweak to make sure the version printed correctly, it seems to work pretty well! I was a bit concerned about the level of Unassigned_Multimapping on the summary text; I asked GitHub Copilot about it, among what it mentioned was that it is possibly due to duplicated sequences, the reference .gtf file is incomplete, etc. Essentially though, the recommendation was as long as the percentage of reads unassigned compared to the total amount of reads was low, it should be fine (for the first output it was around 3% and same for Unassigned_No-Features amounts, and Unassigned_Ambiguity was around 0.36%). I will again check the output with Jelmer tomorrow, and move onto MultiQC and R Studio if it looks good! 
 
+# 12/11/25: 
 
+Obtained the container for multiqc off of Seqera, similar to the others. Assigned it to a variable to make it easier to run: MultiQC=oras://community.wave.seqera.io/library/multiqc:1.33--e3576ddf588fa00d
+
+Using the container help in terminal and this website for help: Anonymous. Running MultiQC. https://docs.seqera.io/multiqc/getting_started/running_multiqc, I worked on a draft of the main section of the script:
+
+```bash
+apptainer exec "$MultiQC" multiqc \
+    --outdir "$outdir" \
+    --template geo \
+    --title "Star and FeatureCounts Summary" \
+    --ignore data/star/slurms/ \
+    --ignore data/featurecounts/slurms/ \
+    results/star/align/ \
+    results/featurecounts/
+```
+
+I changed the `results/star/align/` and `results/featurecounts/` to variables so that it can run easier. I chose the geo template for the output file. I also made sure to add `--ignore` for the slurm files in those two dirs just in case. I created the sbatch code to run the script: 
+
+```bash
+sbatch scripts/run_multiqc.sh results/star/align/ results/featurecounts/ results/multiqc/
+```
+
+Running the script worked, but the geo template was a bit hard on the eyes when I downloaded the .html file. I tried again with a different template (original) and it was much easier to see. It's a pretty cool summary, with a section for both featureCounts and Star. It shows information such as the percent assigned, aligned, and uniq aligned as well as a bar graph of the amount of reads assigned and unassigned for featureCounts. For STAR, it also had information on percent aligned, uniquely aligned, annonated splices, and more, as well as a bar graph of uniquely mapped, mapped to multiple or too many loci, and unmapped. 
 
 
 
