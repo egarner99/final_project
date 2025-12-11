@@ -136,4 +136,20 @@ mkdir results/star/slurms/
 mv slurm*.out results/star/slurms/
 ```
 
-# Getting read counts with featureCounts: 
+# Getting read count summary with featureCounts: 
+
+The script for running featureCounts is in the `run_featurecounts.sh` in the `scripts/` dir. It takes the .gtf file and the BAM files from STAR to create a summary of the counts, which can be input into R Studio. It can be run with the following:
+
+```bash
+for BAM_file in results/star/align/SRR*_Aligned.sortedByCoord.out.bam; do
+    sbatch scripts/run_featurecounts.sh "$BAM_file" data/GCF_Williams82_data/genomic.gtf results/featurecounts/
+done
+```
+The slurm files can be moved and stored using the following: 
+
+```bash
+mkdir results/featurecounts/slurms/
+mv slurm*.out results/featurecounts/slurms/
+```
+
+# Running MultiQC: 
