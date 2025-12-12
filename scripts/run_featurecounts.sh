@@ -28,7 +28,7 @@ apptainer exec "$FeatureCounts" featureCounts \
     -C \
     -T 8 \
     -a "$gtf" \
-    -o "$outdir"/"GM137_samples".txt \
+    -o "$outdir"/"GM137_samples".tsv \
     results/star/align/SRR*_Aligned.sortedByCoord.out.bam
 
 # Final logging
