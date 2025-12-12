@@ -1,0 +1,62 @@
+---
+title: "DESeq2 Steps"
+author: "Elisabeth Garner"
+date: today
+format: html
+editor: visual
+theme: cerulean
+embed-resources: true
+---
+
+```{r}
+# Loading neccessary packages
+# | echo: FALSE
+library(tidyverse)
+library(EnhancedVolcano)
+library(DESeq2)
+library(here)
+```
+
+
+```{r}
+# Assigning the files
+metadata_tsv <- "data/GM137_data/metadata.tsv"
+count_data <- "results/featurecounts/GM137_samples.tsv"
+```
+
+
+```{r}
+# Reading the metadata.tsv file
+meta_raw <- read_tsv(metadata_tsv, 
+                     show_col_types = FALSE)
+```
+
+
+```{r}
+# Making the sample_ids as row-names and changing treatment to a factor
+meta <- meta_raw |> 
+  arrange(sample_id) |>
+  column_to_rownames("sample_id") |>
+  mutate(treatment = factor(treatment, levels = c("noninfected", "H_glycines_race_2", "H_glycines_race_3")))
+```
+
+
+```{r}
+# Prepping the tsv file as a count table
+#| echo: FALSE
+count <- read_tsv(count_data, skip=1)
+count_file <- count[, -(2:6)]
+```
+
+```{r}
+# Making the gene id's rownames 
+count_matches <- count_file |>
+  column_to_rownames("Geneid") |>
+  as.matrix()
+```
+
+```{r}
+# Confirming the row names of meta and he column names are the same
+all(row.names(meta) == colnames(count_matches))
+```
+
