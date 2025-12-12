@@ -285,3 +285,48 @@ Running the script worked, but the geo template was a bit hard on the eyes when 
 
 Started taking a look at the protocol for DESeq2 and realized that I need a count table of all of the samples together, not one for each BAM file. With help from GitHub Copilot, I fixed my script and the sbatch command to run again. For the sbatch command, instead of using a variable for the BAM files I put them into the script, similar to how Copilot showed, so that it would run properly (kept trying to make a dir out of one of the files). Once it was done, I re-ran multqic, and it gave pretty much the same information on the .html file (but now all of the count data is in one .txt file).
 
+For some reason, clicking Tab on a mac did not creating tabs at all, only spaces. I tried a couple of commands from GitHub to try to troubleshoot: 
+
+To confirm the amount of columns, it just output OK, then later `bad line 11 Okay`: 
+
+```bash
+awk -F'\t' 'NR==1{c=NF} NF!=c{print "bad line",NR; exit} END{print "OK"}' data/GM137_data/metadata.tsv
+``` 
+
+Based on the output, it seemed no columns were present. I gave me many other options, a few which I tried. One was to make the contents of the file appear in the terminal, but it still looked like tabs to me:
+
+```bash
+column -t -s $'\t' data/GM137_data/metadata.tsv | head
+```
+
+I also tried this command, but it didn't output `no tabs found`, which made me even more confused: 
+
+```bash
+grep -n $'\t' data/GM137_data/metadata.tsv | head -n1 || echo "no tabs found"
+```
+
+I started to try one other command, but finally I started looking more into this command, which basically outputs symbols for different characters, such as spaces or tabs, and it will do it for the first line: 
+
+```bash
+head -n3 data/GM137_data/metadata.tsv | sed -n '1l'
+```
+
+It mentioned that tabs are supposed to be `/t` which was not appearing in the output: `sample_id   treatment$`. From there I realized it must be a problem with the Tab on my Mac. I tried a quick search on Google but didn't get an answer I was looking for (this website, https://stackoverflow.com/questions/35519538/why-is-the-visual-studio-code-tab-key-not-inserting-a-tab, mentioned trying Ctrl-M to fix), but one solution Copilot gave was to change the Spaces:4 option on the bottom to tab, and that worked to get the tab to appear with the `sed` command: `sample_id\ttreatment$`. It finally got R Studio to recognize the file as having two columns. 
+
+Unfortunately, I am also having the same problem with the featurecounts file. I thought it was an extra option I would have to add to the script, Copilot said I could simply change the script to do so. I re-ran it and multiqc as well, but it still didn't work. GitHub gave me code to remove the comment line at the top; I instead just made a copy of the file, deleted the line and shifted the rest up, and that worked in R Studio. I wanted a way to do so without editing the file manually, Copilot gave a few options, one of which two lines of code for R: 
+
+```bash
+counts <- read.delim("results/featurecounts/combined_counts.txt", skip=1, row.names=1)
+counts <- counts[, -(1:5)]
+```
+
+For it to work with my file however, I changed it to: 
+
+```bash
+count <- read.tsv(count_data, skip=1)
+count_file <- count[, -(2:6)]
+```
+
+The first line skips the comment line, and the second one removes the character, start, end, and length columns, similar to how Copilot said it would just with some edits. 
+
+Continuing with following the steps in the class website, one issue I came to is that the column and row names for the metadata and tsv files are not the same. I will have to ask Jelmer and Menuka tomorrow about how to rename the BAM files either when featureCounts runs so that they are the shorter version, or if I should go with the long names for the metadata file. 
