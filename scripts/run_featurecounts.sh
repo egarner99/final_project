@@ -6,6 +6,7 @@
 #SBATCH --cpus-per-task=8
 
 set -euo pipefail
+
 gtf=$1
 outdir=$2
 
