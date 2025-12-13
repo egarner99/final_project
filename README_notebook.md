@@ -548,7 +548,7 @@ And it worked successfully. I made a section of this code for each of the column
 
 <br>
 
-**Using the steps and code detailed in the Week14A lecture (RNA-Seq count data analysis in R)**, I created a PCA plot for all of the treatments, a Volcano plot for each of the treatments, and a boxplot for one of the most signficantly expressed genes. For organization, the Quarto and .html file were moved into a dir called `r_studio/`: 
+**Using the steps and code detailed in the Week14A lecture (RNA-Seq count data analysis in R)**, I created a PCA plot for all of the treatments, a Volcano plot for each of the treatments, and a boxplot for one of the most signficantly expressed genes. Compared my PCA plot to the one in the original paper as well, seemed to look good in regards to how they are grouped together. For organization, the Quarto and .html file were moved into a dir called `r_studio/`: 
 
 ```bash
 mkdir r_studio/
