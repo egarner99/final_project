@@ -9,7 +9,7 @@
 
 ## Project Description: 
 
-Steps for gene expression analysis of RNA sequencing data from Soybean GM137 that was either noninfected, infected with H. glycines race 2, or H. glycines race 3. Uses FASTQC, TrimGalore, Star, FeatureCounts, MultiQC, and R Studio. 
+Steps for gene expression analysis of RNA sequencing data from Soybean GM137 that was either noninfected, infected with H. glycines race 2, or H. glycines race 3. Data was used from a study conducted by Sultana et al., 2024. The project uses programs such as FASTQC, TrimGalore, Star, FeatureCounts, MultiQC, and R Studio. Steps lead to a Quarto document that can be used to create several graphs for gene expression analysis. 
 
 <br>
 
@@ -287,7 +287,7 @@ It seemed to work well, but I will have to confirm with Jelmer and Menuka tomorr
 <br>
 
 ### Note: 
-For my final project presentation, I looked at a few references that helped me to further understand some of the options for Star index & align, including the class website, GitHub Copilot, and their `--help` pages. This is the reference list: 
+For my final project presentation, I looked at a few references that helped me to further understand my project, as wel as some of the options for Star index & align, including the class website, GitHub Copilot, and their `--help` pages. This is the reference list: 
 
 - Doblin, A. 2019. STAR manual 2.7.0a. https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf. Cornell University editor(s). Cornell University, Ithaca, NY. 
 
@@ -441,7 +441,7 @@ awk -F'\t' 'NR==1{c=NF} NF!=c{print "bad line",NR; exit} END{print "OK"}' data/G
 ``` 
 <br>
 
-I was a bit confused with both outputs, but it gave me many other options to try. One was to make the contents of the file appear in the terminal, but it still looked like tabs to me:
+I was a bit confused with the code and its outputs, but it gave me many other options to try. One was to make the contents of the file appear in the terminal, but it still looked like tabs to me:
 
 ```bash
 column -t -s $'\t' data/GM137_data/metadata.tsv | head
@@ -548,7 +548,7 @@ And it worked successfully. I made a section of this code for each of the column
 
 <br>
 
-**Using the steps and code detailed in the Week14A lecture (RNA-Seq count data analysis in R)**, I created a PCA plot for all of the treatments, a volcano plot for each of the treatments, and a boxplot for one of the most signficantly expressed genes. For organization, the Quarto and .html file were moved into a dir called `r_studio/`: 
+**Using the steps and code detailed in the Week14A lecture (RNA-Seq count data analysis in R)**, I created a PCA plot for all of the treatments, a Volcano plot for each of the treatments, and a boxplot for one of the most signficantly expressed genes. For organization, the Quarto and .html file were moved into a dir called `r_studio/`: 
 
 ```bash
 mkdir r_studio/
@@ -557,5 +557,38 @@ mv deseq2_steps* r_studio/
 
 <br>
 
-Once everything I was looked over, I deleted the `old_stuff/` dir with previous trials. I also saved my GitHub Copilot questions and responses, in case any of the code or answers recieved were not mentioned here in this document. 
+Once everything was looked over, I deleted the `old_stuff/` dir with the previous trials. Unfortunately, I couldn't figure out how to delete my git commits for the dirs from before I re-organized the `final_project/` dir, so I left those alone.
 
+<br>
+
+Learned a lot working on this project! 
+
+
+<br>
+
+
+### References: 
+
+- Doblin, A. 2019. STAR manual 2.7.0a. https://physiology.med.cornell.edu/faculty/skrabanek/lab/angsd/lecture_notes/STARmanual.pdf. Cornell University editor(s). Cornell University, Ithaca, NY. 
+
+- Regan, K., Saghafi, A., Li, Z. 2021. Splice Junction Identification using Long Short-Term Memory Neural Networks. Curr Genomics. 22:384-390. 
+
+- Cozzuto, L., Ponomarenko, J., Bonnin, S. 2019. Mapping using Star. https://biocorecrg.github.io/RNAseq_course_2019/alnpractical.html. Biocore editor(s). Barcelona, Spain.
+
+- Anonymous. 2013. What’s the difference between a bam and sorted bam. https://www.seqanswers.com/forum/bioinformatics/bioinformatics-aa/29595-what-s-the-difference-between-a-bam-and-a-sorted-bam. 
+
+- Sultana, M.S., Niyikiza, D., Hawk, T.E., Coffey, N., Lopes-Caitar, V., Pfotenhauer, A.C., El-Messidi, H., Wyman, C., Pantalone, V., Hewezi, T. 2024. Differential Transcriptome Reprogramming Induced by the Soybean Cyst Nematode Type 0 and Type 1.2.5.7 During Resistant and Susceptible Interactions. Mol Plant Microbe Interact. 37:828-840.
+
+- Anonymous. 2025. Understanding Soybean Cyst Nematode Genetic Resistance. https://www.cropscience.bayer.us/articles/bayer/understanding-scn-genetic-resistance. Bayer Crop Science editor(s). Bayer, Whippany, NJ. 
+
+- Harrington, R. FeatureCounts. https://rnnh.github.io/bioinfo-notebook/docs/featureCounts.html.
+
+- Anonymous. 2021. featureCounts: a ultrafast and accurate read summarization program. https://subread.sourceforge.net/featureCounts.html.
+
+- Anonymous. Running MultiQC. https://docs.seqera.io/multiqc/getting_started/running_multiqc
+
+- Why is the Visual Studio Code Tab Key not inserting a tab?. https://stackoverflow.com/questions/35519538/why-is-the-visual-studio-code-tab-key-not-inserting-a-tab.
+
+- Poelstra, J. and Bhandari, M. 2025. Practical Computing Skills for Omics Data. https://mcic-osu.github.io/pracs-au25/. Department of Plant Pathology editor(s). Department of Plant Pathology, Ohio State Univeristy, Columbus, OH. 
+
+- GitHub Copilot
