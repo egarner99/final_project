@@ -1,0 +1,291 @@
+---
+title: "DESeq2 Steps"
+author: "Elisabeth Garner"
+date: today
+format: html
+editor: visual
+theme: cerulean
+embed-resources: true
+---
+ 
+# Preparing the data:
+```{r}
+# Loading neccesary packages
+library(tidyverse)
+library(EnhancedVolcano)
+library(DESeq2)
+library(here)
+```
+
+
+```{r}
+# Assigning the files
+
+metadata_tsv <- "data/GM137_data/metadata.tsv"
+count_data <- "results/featurecounts/GM137_samples.tsv"
+```
+
+
+```{r}
+# Reading the metadata.tsv file
+
+meta_raw <- read_tsv(metadata_tsv, 
+                     show_col_types = FALSE)
+```
+
+
+```{r}
+# Making the sample_ids as row-names and changing treatment to a factor
+
+meta <- meta_raw |> 
+  arrange(sample_id) |>
+  column_to_rownames("sample_id") |>
+  mutate(treatment = factor(treatment, levels = c("noninfected", "H_glycines_race_2", "H_glycines_race_3")))
+```
+
+
+```{r}
+# Prepping the tsv file as a count table
+count <- read_tsv(count_data, skip=1)
+count_file <- count[, -(2:6)]
+```
+
+
+```{r}
+# Renaming the columns to match the row names on the meta file
+
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727827_GSM7426424_Gm137_noninfected_RNA_bio_rep_3_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727827"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727828_GSM7426423_Gm137_noninfected_RNA_bio_rep_2_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727828"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727829_GSM7426422_Gm137_noninfected_RNA_bio_rep_1_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727829"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727830_GSM7426421_Gm137_H._glycines_Race_2_infected_RNA_bio_rep_3_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727830"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727831_GSM7426420_Gm137_H._glycines_Race_2_infected_RNA_bio_rep_2_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727831"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727832_GSM7426419_Gm137_H._glycines_Race_2_infected_RNA_bio_rep_1_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727832"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727833_GSM7426418_Gm137_H._glycines_Race_3_infected_RNA_bio_rep_3_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727833"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727834_GSM7426417_Gm137_H._glycines_Race_3_infected_RNA_bio_rep_2_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727834"
+colnames(count_file)[colnames(count_file) ==
+  "results/star/align/SRR24727835_GSM7426416_Gm137_H._glycines_Race_3_infected_RNA_bio_rep_1_Glycine_max_RNA_Aligned.sortedByCoord.out.bam"] <-
+  "SRR24727835"
+```
+
+
+```{r}
+# Making the gene id's into row names
+
+count_matches <- count_file |>
+  column_to_rownames("Geneid") |>
+  as.matrix()
+```
+
+
+```{r}
+# Confirming the row names of meta and he column names are the same
+
+all(row.names(meta) == colnames(count_matches))
+```
+
+
+```{r}
+# Making the DESeq2 object
+
+dds <- DESeqDataSetFromMatrix(
+  colData = meta,
+  countData = count_matches,
+  design = ~ 1
+)
+```
+
+
+# For the PCA Plot: 
+```{r}
+# Preparing the data
+
+dds_vst <- varianceStabilizingTransformation(dds)
+```
+
+
+```{r}
+# Creating the PCA plot
+
+plotPCA(dds_vst, intgroup = c("treatment"))
+```
+
+
+# For the Volcano Plot: 
+
+```{r}
+# Making a new variable with the treatment groups:
+
+dds$group <- factor(paste(dds$treatment))
+```
+
+
+```{r}
+# Making the statistical design:
+
+design(dds) <- ~group
+```
+
+
+```{r}
+# Running the Differential Expression Analysis
+
+dds <- DESeq(dds)
+```
+
+
+```{r}
+# DE results for H_glycines_race_2 vs H_glycines_race_3
+
+focal_contrast <- c("group", "H_glycines_race_2", "H_glycines_race_3")
+HGly2_HGly3 <- results(dds, contrast = focal_contrast)
+
+head(HGly2_HGly3)
+```
+
+
+```{r}
+# Volcano Plot for H_glycines_race_2 vs H_glycines_race_3
+
+EnhancedVolcano(
+  toptable = HGly2_HGly3, 
+  title = "H. glycines race 2 vs H. glycines race 3", 
+  x = "log2FoldChange", 
+  y = "padj", 
+  lab = rownames(HGly2_HGly3),
+  labSize = 3, 
+  pCutoff = 10e-10, 
+  subtitle = NULL, 
+  caption = NULL
+)
+```
+
+
+```{r}
+# DE results for H_glycines_race_2 vs noninfected
+
+focal_contrast <- c("group", "H_glycines_race_2", "noninfected")
+HGly2_NI <- results(dds, contrast = focal_contrast)
+
+head(HGly2_NI)
+```
+
+
+```{r}
+# Volcano Plot for H_glycines_race_2 vs Noninfected
+
+EnhancedVolcano(
+  toptable = HGly2_NI, 
+  title = "H. glycines race 2 vs Noninfected", 
+  x = "log2FoldChange", 
+  y = "padj", 
+  lab = rownames(HGly2_NI), 
+  labSize = 2, 
+  pCutoff = 10e-10, 
+  subtitle = NULL, 
+  caption = NULL
+)
+```
+
+
+```{r}
+# DE results for H_glycines_race_3 vs noninfected
+
+focal_contrast <- c("group", "H_glycines_race_3", "noninfected")
+HGly3_NI <- results(dds, contrast = focal_contrast)
+
+head(HGly3_NI)
+```
+
+
+```{r}
+# Volcano Plot for H_glycines_race_3 vs Noninfected
+
+EnhancedVolcano(
+  toptable = HGly3_NI, 
+  title = "H. glycines race 3 vs Noninfected", 
+  x = "log2FoldChange", 
+  y = "padj", 
+  lab = rownames(HGly3_NI), 
+  labSize = 2, 
+  pCutoff = 10e-10, 
+  subtitle = NULL, 
+  caption = NULL
+)
+```
+
+
+```{r}
+# Selecting top 25 DEGs for GM137
+top25_DE <- row.names(HGly2_HGly3[order(HGly2_HGly3$padj)[1:25], ])
+
+top25_DE
+```
+
+
+```{r}
+# Creating table of counts for gene LOC100789313
+
+gene_counts <- plotCounts(
+  dds, 
+  gene = top25_DE[1],
+  intgroup = c("treatment"), 
+  returnData = TRUE
+)
+
+head(gene_counts)
+```
+
+
+```{r}
+# Plotting the counts for gene LOC100789313
+
+gene_counts |>
+  ggplot(aes(x=treatment, y = count, fill = treatment, color = treatment)) +
+  geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+  geom_point(size = 4, shape = 21, position = position_jitter(w = 0.1, h = 0)) + 
+  theme_get() + 
+  theme(legend.position = "none") +
+  labs(title = "Expression of gene LOC100789313") + 
+  scale_color_manual(values = c("lightgreen","lightblue", "mediumpurple"))
+```
+
+
+# Saving the results tables:
+```{r}
+# For H. glycine race 2 vs H. glycines race 3
+
+dir.create("results/DESeq2", recursive = TRUE, showWarnings = FALSE)
+write_tsv(as.data.frame(HGly2_HGly3), "results/DESeq2/H_glycines_race_2_vs_H_glycines_race_3.tsv")
+```
+
+
+```{r}
+# For H. glycine race 2 vs noninfected
+
+dir.create("results/DESeq2", recursive = TRUE, showWarnings = FALSE)
+write_tsv(as.data.frame(HGly2_NI), "results/DESeq2/H_glycines_race_2_vs_noninfected.tsv")
+```
+
+
+```{r}
+# For H. glycine race 3 vs noninfected
+
+dir.create("results/DESeq2", recursive = TRUE, showWarnings = FALSE)
+write_tsv(as.data.frame(HGly3_NI), "results/DESeq2/H_glycines_race_3_vs_noninfected.tsv")
+```
